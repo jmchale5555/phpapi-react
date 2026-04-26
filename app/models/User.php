@@ -13,6 +13,7 @@ class User
         'name',
         'email',
         'password',
+        'role',
     ];
 
     public function validate($data)

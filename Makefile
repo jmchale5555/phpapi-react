@@ -1,7 +1,7 @@
 COMPOSE_BASE = docker compose -f docker-compose.yaml
 COMPOSE_DEV = docker compose -f docker-compose.yaml -f docker-compose.dev.yaml
 
-.PHONY: help up down build logs ps restart dev-up dev-down dev-build dev-logs dev-ps dev-restart shell-php shell-node composer-install migrate migrate-down migrate-fresh test test-feature test-unit test-integration danger-prune dev-danger-prune
+.PHONY: help up down build logs ps restart dev-up dev-down dev-build dev-logs dev-ps dev-restart shell-php shell-node composer-install seed-admin migrate migrate-down migrate-fresh test test-feature test-unit test-integration danger-prune dev-danger-prune
 
 help:
 	@printf "Base stack commands:\n"
@@ -20,6 +20,7 @@ help:
 	@printf "  make shell-php     Open shell in php container\n"
 	@printf "  make shell-node    Open shell in node container\n"
 	@printf "  make composer-install Install PHP dependencies in dev php container\n"
+	@printf "  make seed-admin    Prompt and create initial admin user\n"
 	@printf "  make migrate       Run migrations up\n"
 	@printf "  make migrate-down  Roll back last migration batch\n"
 	@printf "  make migrate-fresh Drop and recreate database schema\n"
@@ -75,6 +76,9 @@ shell-node:
 
 composer-install:
 	$(COMPOSE_DEV) exec -T php composer install
+
+seed-admin:
+	$(COMPOSE_DEV) exec php php cli/seed_admin.php
 
 migrate:
 	$(COMPOSE_DEV) exec -T php php cli/migrate.php up
