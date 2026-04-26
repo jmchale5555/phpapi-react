@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+define('ROOTPATH', dirname(__DIR__) . '/public' . DIRECTORY_SEPARATOR);
+
 require dirname(__DIR__) . '/app/core/init.php';
 
 use Model\User;
