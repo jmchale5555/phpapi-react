@@ -49,7 +49,7 @@ restart:
 	$(COMPOSE_BASE) restart
 
 dev-up:
-	$(COMPOSE_DEV) up -d --build
+	$(COMPOSE_DEV) up --build
 
 dev-down:
 	$(COMPOSE_DEV) down
