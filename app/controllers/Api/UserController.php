@@ -4,6 +4,7 @@ namespace Controller\Api;
 
 use Core\ApiController;
 use Core\Session;
+use Resource\UserResource;
 
 defined('ROOTPATH') or exit('Access Denied');
 
@@ -27,11 +28,7 @@ class UserController extends ApiController
         }
 
         $this->ok([
-            'user' => [
-                'id' => $user->id ?? null,
-                'name' => $user->name ?? null,
-                'email' => $user->email ?? null,
-            ],
+            'user' => UserResource::make($user, ['viewer' => $user, 'mode' => 'self']),
         ]);
     }
 }

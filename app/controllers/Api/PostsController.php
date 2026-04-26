@@ -6,6 +6,7 @@ use Core\ApiController;
 use Core\Request;
 use Core\Session;
 use Model\Post;
+use Resource\PostResource;
 use Throwable;
 
 defined('ROOTPATH') or exit('Access Denied');
@@ -43,7 +44,7 @@ class PostsController extends ApiController
             return;
         }
 
-        $posts = array_map([$this, 'formatPost'], $result['items']);
+        $posts = PostResource::collection($result['items']);
         $this->ok([
             'posts' => $posts,
             'meta' => $result['meta'],
@@ -83,7 +84,7 @@ class PostsController extends ApiController
             return;
         }
 
-        $this->ok(['post' => $this->formatPost($row)]);
+        $this->ok(['post' => PostResource::make($row)]);
     }
 
     public function create(): void
@@ -142,7 +143,7 @@ class PostsController extends ApiController
             return;
         }
 
-        $this->ok(['post' => $this->formatPost($created)], 201);
+        $this->ok(['post' => PostResource::make($created)], 201);
     }
 
     public function update(string $id = ''): void
@@ -227,7 +228,7 @@ class PostsController extends ApiController
             return;
         }
 
-        $this->ok(['post' => $this->formatPost($updated)]);
+        $this->ok(['post' => PostResource::make($updated)]);
     }
 
     public function delete(string $id = ''): void
@@ -420,18 +421,4 @@ class PostsController extends ApiController
         return $value;
     }
 
-    private function formatPost(mixed $row): array
-    {
-        return [
-            'id' => isset($row->id) ? (int)$row->id : null,
-            'user_id' => isset($row->user_id) ? (int)$row->user_id : null,
-            'title' => $row->title ?? '',
-            'body' => $row->body ?? '',
-            'slug' => $row->slug ?? '',
-            'is_published' => !empty($row->is_published),
-            'published_at' => $row->published_at ?? null,
-            'created_at' => $row->created_at ?? null,
-            'updated_at' => $row->updated_at ?? null,
-        ];
-    }
 }

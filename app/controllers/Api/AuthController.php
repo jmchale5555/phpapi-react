@@ -6,6 +6,7 @@ use Core\ApiController;
 use Core\Request;
 use Core\Session;
 use Model\User;
+use Resource\UserResource;
 use Throwable;
 
 defined('ROOTPATH') or exit('Access Denied');
@@ -47,7 +48,7 @@ class AuthController extends ApiController
         $session = new Session();
         $user = $session->user();
 
-        $this->ok(['user' => $user ? $this->sanitizeUser($user) : null]);
+        $this->ok(['user' => UserResource::make($user, ['viewer' => $user, 'mode' => 'self'])]);
     }
 
     public function login(): void
@@ -117,7 +118,7 @@ class AuthController extends ApiController
             session_regenerate_id(true);
         }
 
-        $this->ok(['user' => $this->sanitizeUser($row)]);
+        $this->ok(['user' => UserResource::make($row, ['viewer' => $row, 'mode' => 'self'])]);
     }
 
     public function signup(): void
@@ -193,7 +194,7 @@ class AuthController extends ApiController
             session_regenerate_id(true);
         }
 
-        $this->ok(['user' => $this->sanitizeUser($newUser)], 201);
+        $this->ok(['user' => UserResource::make($newUser, ['viewer' => $newUser, 'mode' => 'self'])], 201);
     }
 
     public function logout(): void
@@ -266,12 +267,4 @@ class AuthController extends ApiController
         return true;
     }
 
-    private function sanitizeUser(mixed $user): array
-    {
-        return [
-            'id' => $user->id ?? null,
-            'name' => $user->name ?? null,
-            'email' => $user->email ?? null,
-        ];
-    }
 }

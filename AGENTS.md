@@ -192,6 +192,7 @@ php cli/migrate.php status
 - Routing pattern: `/api/{resource}/{method?}/{param1?}/{param2?...}`.
 - If method is omitted, it defaults to `index`.
 - Use `ApiController` helpers (`ok`, `error`, `methodNotAllowed`, `notFound`).
+- Prefer API resource classes under `app/resources/` for response shaping instead of inline controller arrays.
 - CSRF token endpoint: `GET /api/auth/csrf`.
 - Mutating auth endpoints expect `X-CSRF-Token` header.
 - Keep error payloads consistent:
@@ -213,6 +214,14 @@ Route examples:
 - `POST /api/posts/create` -> `PostsController::create()`
 - `POST /api/posts/update/12` -> `PostsController::update("12")`
 - `POST /api/posts/delete/12` -> `PostsController::delete("12")`
+
+API resource decision rule:
+
+- Start with a single resource class + context flags (for example `viewer`, `mode`).
+- Split into base+variants when either condition is met:
+  - more than 3 modes are needed, or
+  - the resource accumulates more than 5 conditional field branches.
+- If output shaping starts requiring a truth-table to reason about safely, split into variants.
 
 ## 7) Backend Style Guidelines
 

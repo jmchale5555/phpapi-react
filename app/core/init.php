@@ -18,6 +18,16 @@ spl_autoload_register(function ($className)
         return;
     }
 
+    if (str_starts_with($className, 'Resource\\'))
+    {
+        $resourceFile = __DIR__ . '/../resources/' . ucfirst($shortName) . '.php';
+        if (is_file($resourceFile))
+        {
+            require_once $resourceFile;
+            return;
+        }
+    }
+
     $isModelClass = str_starts_with($className, 'Model\\') || count($parts) === 1;
     if ($isModelClass)
     {
