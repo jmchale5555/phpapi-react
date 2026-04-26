@@ -1,5 +1,7 @@
 FROM php:8.2-fpm
 
+ARG COMPOSER_FLAGS="--no-dev --no-interaction --prefer-dist --optimize-autoloader"
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
@@ -22,6 +24,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
+RUN git config --global --add safe.directory /var/www/html
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+COPY composer.json composer.lock ./
+
+RUN composer install ${COMPOSER_FLAGS}
+
+COPY . ./

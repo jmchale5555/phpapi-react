@@ -1,0 +1,6 @@
+.git
+.gitignore
+node_modules
+vendor
+public/spa
+session-ses_30ca.md

@@ -58,7 +58,13 @@ Containerized dev (recommended):
 ```bash
 docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
 # or: make dev-up
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php composer install
+# or: make composer-install
 ```
+
+Agent preference note:
+
+- Do not use detached mode (`-d`) for `make dev-up`; keep it foreground unless the user explicitly asks for detached mode.
 
 ## 5) Build / Lint / Test Commands
 
@@ -267,6 +273,8 @@ Naming:
 
 - Base services (`docker-compose.yaml`): `db`, `php`, `nginx`.
 - Dev overlay services (`docker-compose.dev.yaml`): `node`, `php_test`, `nginx_test`.
+- Base stack uses an internal `app_code` named volume shared between `php` and `nginx`.
+- Dev overlay replaces `php`/`nginx` code mounts with bind mounts for local editing.
 - App URL through nginx: `http://localhost:8080`.
 - Vite dev server URL: `http://localhost:5173`.
 - Test API URL through nginx test service: `http://localhost:8081`.
