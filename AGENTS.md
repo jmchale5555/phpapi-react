@@ -39,7 +39,8 @@ If these files appear later, treat them as higher-priority repo policy and updat
 - Frontend source: `frontend/`
 - Vite config: `vite.config.js`
 - Nginx config: `docker/nginx/default.conf`
-- Compose stack: `docker-compose.yaml`
+- Compose base stack: `docker-compose.yaml`
+- Compose dev overlay: `docker-compose.dev.yaml`
 
 ## 4) Setup Commands
 
@@ -55,7 +56,8 @@ php cli/migrate.php up
 Containerized dev (recommended):
 
 ```bash
-docker compose up -d --build
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
+# or: make dev-up
 ```
 
 ## 5) Build / Lint / Test Commands
@@ -90,7 +92,7 @@ php -l app/controllers/Api/AuthController.php
 For container workflows:
 
 ```bash
-docker compose exec -T php php -l app/core/App.php
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php php -l app/core/App.php
 ```
 
 ### Tests
@@ -102,31 +104,34 @@ Current status:
 Run full suite (inside php container):
 
 ```bash
-docker compose exec -T php vendor/bin/phpunit
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php vendor/bin/phpunit
+# or: make test
 ```
 
 Run unit suite only:
 
 ```bash
-docker compose exec -T php vendor/bin/phpunit --testsuite Unit
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php vendor/bin/phpunit --testsuite Unit
+# or: make test-unit
 ```
 
 Run feature suite against live docker nginx/php test stack:
 
 ```bash
-docker compose exec -T php vendor/bin/phpunit --testsuite Feature
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php vendor/bin/phpunit --testsuite Feature
+# or: make test-feature
 ```
 
 Run a single test file:
 
 ```bash
-docker compose exec -T php vendor/bin/phpunit tests/Feature/AuthApiTest.php
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php vendor/bin/phpunit tests/Feature/AuthApiTest.php
 ```
 
 Run a single test method:
 
 ```bash
-docker compose exec -T php vendor/bin/phpunit --filter testSignupAndMeFlow tests/Feature/AuthApiTest.php
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml exec -T php vendor/bin/phpunit --filter testSignupAndMeFlow tests/Feature/AuthApiTest.php
 ```
 
 Local (non-docker) PHPUnit equivalents:
@@ -260,8 +265,8 @@ Naming:
 
 ## 9) Docker Notes
 
-- Services: `db`, `php`, `nginx`, `node`.
-- Test services: `php_test`, `nginx_test`.
+- Base services (`docker-compose.yaml`): `db`, `php`, `nginx`.
+- Dev overlay services (`docker-compose.dev.yaml`): `node`, `php_test`, `nginx_test`.
 - App URL through nginx: `http://localhost:8080`.
 - Vite dev server URL: `http://localhost:5173`.
 - Test API URL through nginx test service: `http://localhost:8081`.
