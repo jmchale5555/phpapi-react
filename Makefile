@@ -1,7 +1,7 @@
 COMPOSE_BASE = docker compose -f docker-compose.yaml
 COMPOSE_DEV = docker compose -f docker-compose.yaml -f docker-compose.dev.yaml
 
-.PHONY: help up down build logs ps restart dev-up dev-down dev-build dev-logs dev-ps dev-restart shell-php shell-node migrate migrate-down migrate-fresh test test-feature test-unit test-integration
+.PHONY: help up down build logs ps restart dev-up dev-down dev-build dev-logs dev-ps dev-restart shell-php shell-node migrate migrate-down migrate-fresh test test-feature test-unit test-integration danger-prune dev-danger-prune
 
 help:
 	@printf "Base stack commands:\n"
@@ -26,6 +26,9 @@ help:
 	@printf "  make test-feature  Run feature test suite\n"
 	@printf "  make test-unit     Run unit test suite\n"
 	@printf "  make test-integration Run integration test suite\n"
+	@printf "\nDanger zone:\n"
+	@printf "  make danger-prune  Run sudo docker system prune -a --volumes\n"
+	@printf "  make dev-danger-prune Run sudo docker system prune -a --volumes\n"
 
 up:
 	$(COMPOSE_BASE) up -d --build
@@ -89,3 +92,9 @@ test-unit:
 
 test-integration:
 	$(COMPOSE_DEV) exec -T php vendor/bin/phpunit --testsuite Integration
+
+danger-prune:
+	sudo docker system prune -a --volumes
+
+dev-danger-prune:
+	sudo docker system prune -a --volumes
