@@ -23,34 +23,34 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-md rounded-xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-      <h1 className="mb-6 text-2xl font-bold text-slate-900">Sign in</h1>
+    <section className="mx-auto w-full max-w-md rounded-xl bg-white p-8 shadow-sm ring-1 ring-slate-200 transition-colors dark:bg-slate-900 dark:ring-slate-700">
+      <h1 className="mb-6 text-2xl font-bold text-slate-900 dark:text-slate-100">Sign in</h1>
 
       {message ? <p className="mb-4 rounded bg-emerald-100 px-3 py-2 text-emerald-800">{message}</p> : null}
       {error ? <p className="mb-4 rounded bg-rose-100 px-3 py-2 text-rose-800">{error}</p> : null}
 
       <form className="space-y-4" onSubmit={onSubmit}>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="email">
+          <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="email">
             Email
           </label>
           <input
             id="email"
             type="email"
-            className="w-full rounded border border-slate-300 px-3 py-2"
+            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
             value={form.email}
             onChange={(event) => setForm({ ...form, email: event.target.value })}
             required
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="password">
+          <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="password">
             Password
           </label>
           <input
             id="password"
             type="password"
-            className="w-full rounded border border-slate-300 px-3 py-2"
+            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
             value={form.password}
             onChange={(event) => setForm({ ...form, password: event.target.value })}
             required

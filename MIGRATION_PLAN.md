@@ -41,7 +41,6 @@ This document captures the concrete migration plan for moving this repository fr
 - `frontend/src/lib/auth.js`
 - `frontend/src/styles/index.css`
 - `frontend/postcss.config.js`
-- `frontend/tailwind.config.cjs`
 - `vite.config.js`
 - `package.json` (Vite scripts)
 - `docker/`
